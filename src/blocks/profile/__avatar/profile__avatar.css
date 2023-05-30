@@ -1,0 +1,16 @@
+.profile__avatar {
+  background-color: transparent;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  transition: ease;
+  transition-duration: 0.5s;
+  z-index: 0;
+  border: none;
+}
+
+.profile__avatar:hover .profile__avatar-edit {
+  visibility: visible;
+  opacity: 1
+}
+

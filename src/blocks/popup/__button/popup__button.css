@@ -1,0 +1,6 @@
+.popup__button {
+  border: none;
+  background-color: black;
+  color: #ffffff;
+  transition: 0.5s;
+}
