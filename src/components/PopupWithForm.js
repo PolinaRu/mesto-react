@@ -20,7 +20,7 @@ function PopupWithForm(props) {
         className="popup__button popup__button_making_save popup__button_making_save_avatar"
         disabled
       >
-        Сохранить
+        {props.buttonText}
       </button>
     </form>
   </div>

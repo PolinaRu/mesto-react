@@ -18,13 +18,13 @@ class App extends React.Component {
   
     // Обработчики событий: изменяют внутреннее состояние
     handleEditAvatarClick = () => {
-      this.setState({ isEditAvatarPopupOpen: !this.state.isEditAvatarPopupOpen });
+      this.setState({ isEditAvatarPopupOpen: true });
     };
     handleEditProfileClick = () => {
-      this.setState({ isEditProfilePopupOpen: !this.state.isEditProfilePopupOpen });
+      this.setState({ isEditProfilePopupOpen: true });
     };
     handleAddPlaceClick = () => {
-      this.setState({ isAddPlacePopupOpen: !this.state.isAddPlacePopupOpen });
+      this.setState({ isAddPlacePopupOpen: true });
     };
     handleCardClick = (card)=> {
       this.setState({ selectedCard: card });
@@ -54,7 +54,8 @@ render() {
       isOpen={this.state.isEditProfilePopupOpen}
       onClose={this.closeAllPopups}
       name="profile"
-      title="Редактировать профиль">
+      title="Редактировать профиль"
+      buttonText="Сохранить">
           <fieldset className="popup__title">
             <input
               className="popup__input"
@@ -91,6 +92,7 @@ render() {
     <PopupWithForm 
       name="element"
       title="Новое место"
+      buttonText="Сохранить"
       isOpen={this.state.isAddPlacePopupOpen}
       onClose={this.closeAllPopups}>
           <fieldset className="popup__title">
@@ -125,6 +127,7 @@ render() {
     <PopupWithForm 
       name="avatar"
       title="Обновить аватар"
+      buttonText="Сохранить"
       isOpen={this.state.isEditAvatarPopupOpen}
       onClose={this.closeAllPopups}>
        <fieldset className="popup__subtitle">

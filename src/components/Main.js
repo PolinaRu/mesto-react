@@ -16,19 +16,14 @@ class Main extends React.Component {
 
      // Метод будет вызван сразу после монтирования: получаем первичные данные
     componentDidMount() {
-      Promise.all([Api.getUser()])
-        .then(([user]) => {
+      Promise.all([Api.getUser(), Api.getInitialCards()])
+        .then(([user, cards]) => {
           //profile.id = user._id;
           this.setState({userName: user.name,
             userDescription: user.about,
-            userAvatar: user.avatar});
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-      Promise.all([Api.getInitialCards()])
-        .then(([cards]) => {
-          this.setState({cards: cards});
+            userAvatar: user.avatar,
+            cards: cards
+          });
         })
         .catch((err) => {
           console.error(err);
@@ -72,7 +67,10 @@ render() {
       <section className="elements">
         <ul className="elements__list">
         {this.state.cards.map((card) => (
-          <Card card={card} onCardClick={this.props.onCardClick}/>
+          <Card 
+            card={card} 
+            onCardClick={this.props.onCardClick}
+            key={card._id}/>
         ))}
         </ul>
       </section>
