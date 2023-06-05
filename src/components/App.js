@@ -13,7 +13,8 @@ class App extends React.Component {
         isEditProfilePopupOpen: false,
         isAddPlacePopupOpen: false,
         isEditAvatarPopupOpen: false,
-        selectedCard: {} };
+        selectedCard: {},
+        currentUser: {} };
     }
   
     // Обработчики событий: изменяют внутреннее состояние
