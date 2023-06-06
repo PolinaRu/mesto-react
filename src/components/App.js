@@ -16,22 +16,24 @@ class App extends React.Component {
         isAddPlacePopupOpen: false,
         isEditAvatarPopupOpen: false,
         selectedCard: {},
-        currentUser: {} };
+        currentUser: {},
+        cards: [] };
     }
 
    // Метод будет вызван сразу после монтирования: получаем первичные данные
    componentDidMount() {
-    Api.getUser()
-      .then((user) => {
-        //profile.id = user._id;
-        this.setState({currentUser: {userName: user.name,
-          userDescription: user.about,
-          userAvatar: user.avatar}
+    Promise.all([Api.getUser(), Api.getInitialCards()])
+        .then(([user, cards]) => {
+          this.setState({currentUser: {userName: user.name,
+            userDescription: user.about,
+            userAvatar: user.avatar,
+            _id: user._id},
+            cards: cards
+          });
+        })
+        .catch((err) => {
+          console.error(err);
         });
-      })
-      .catch((err) => {
-        console.error(err);
-      });
   }
     // Обработчики событий: изменяют внутреннее состояние
     handleEditAvatarClick = () => {
@@ -45,7 +47,20 @@ class App extends React.Component {
     };
     handleCardClick = (card)=> {
       this.setState({ selectedCard: card });
-    }
+    };
+    handleCardDelete = (id) => {
+      Api.deleteMyElement(id)
+      .then(() => {
+        this.setState({cards: this.state.cards.filter((item)=>item._id != id)})
+      });
+    };
+    handleCardLike(card) {
+      const isLiked = card.likes.some(i => i._id === this.state.currentUser._id);  
+      // Отправляем запрос в API и получаем обновлённые данные карточки
+      Api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
+        this.setState({cards: this.state.cards.map((c) => c._id === card._id ? newCard : c)});
+      });
+    };
     closeAllPopups = ()=> {
       this.setState({ 
         isEditAvatarPopupOpen: false,
@@ -60,10 +75,13 @@ render() {
     <CurrentUserContext.Provider value={this.state.currentUser}>
       <Header />
       <Main 
+        cards={this.state.cards}
         onEditProfile={this.handleEditProfileClick}
         onAddPlace={this.handleAddPlaceClick}
         onEditAvatar={this.handleEditAvatarClick} 
-        onCardClick={this.handleCardClick} />
+        onCardClick={this.handleCardClick} 
+        onCardDelete={this.handleCardDelete}
+        onCardLike={this.handleCardLike.bind(this)}/>
       <Footer />
       <ImagePopup card={this.state.selectedCard} onClose={this.closeAllPopups} />
 

@@ -1,6 +1,5 @@
 import React from "react";
 import editPath from "../images/edit.svg";
-import Api from "../utlis/Api";
 import Card from "./Card";
 import {CurrentUserContext} from "../contexts/CurrentUserContext";
 
@@ -8,22 +7,6 @@ class Main extends React.Component {
     static contextType = CurrentUserContext;
     constructor(props) {
       super(props);
-  
-      this.state = { 
-        cards: [] };
-    }
-
-     // Метод будет вызван сразу после монтирования: получаем первичные данные
-    componentDidMount() {
-       Api.getInitialCards()
-        .then((cards) => {
-          this.setState({
-            cards: cards
-          });
-        })
-        .catch((err) => {
-          console.error(err);
-        });
     }
   
 render() {
@@ -62,10 +45,12 @@ render() {
 
       <section className="elements">
         <ul className="elements__list">
-        {this.state.cards.map((card) => (
+        {this.props.cards.map((card) => (
           <Card 
             card={card} 
             onCardClick={this.props.onCardClick}
+            onCardDelete={this.props.onCardDelete}
+            onCardLike={this.props.onCardLike}
             key={card._id}/>
         ))}
         </ul>

@@ -75,6 +75,12 @@ class api {
       headers: this._headers,
     });
   }
+  changeLikeCardStatus(elementId, isLiked) {
+    return this._request(`${this._url}/cards/likes/${elementId}`, {
+      method: isLiked ? "PUT" : "DELETE",
+      headers: this._headers,
+    });
+  }
 };
 
 
