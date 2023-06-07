@@ -5,6 +5,7 @@ import Main from "./Main";
 import Footer from "./Footer";
 import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
+import EditProfilePopup from "./EditProfilePopup";
 import {CurrentUserContext} from "../contexts/CurrentUserContext";
 
 class App extends React.Component {
@@ -42,6 +43,13 @@ class App extends React.Component {
     handleEditProfileClick = () => {
       this.setState({ isEditProfilePopupOpen: true });
     };
+    handleUpdateUser = ({name, about}) => {
+      Api.editProfile(name,about)
+      .then(() => {
+        this.setState({currentUser: {...this.state.currentUser, userName:name,userDescription: about}});
+        this.closeAllPopups();
+      });
+    };
     handleAddPlaceClick = () => {
       this.setState({ isAddPlacePopupOpen: true });
     };
@@ -51,7 +59,7 @@ class App extends React.Component {
     handleCardDelete = (id) => {
       Api.deleteMyElement(id)
       .then(() => {
-        this.setState({cards: this.state.cards.filter((item)=>item._id != id)})
+        this.setState({cards: this.state.cards.filter((item)=>item._id !== id)})
       });
     };
     handleCardLike(card) {
@@ -85,45 +93,11 @@ render() {
       <Footer />
       <ImagePopup card={this.state.selectedCard} onClose={this.closeAllPopups} />
 
-      <PopupWithForm 
-        isOpen={this.state.isEditProfilePopupOpen}
-        onClose={this.closeAllPopups}
-        name="profile"
-        title="Редактировать профиль"
-        buttonText="Сохранить">
-            <fieldset className="popup__title">
-              <input
-                className="popup__input"
-                type="text"
-                name="profile__title"
-                id="profile-title"
-                placeholder="Имя"
-                required
-                defaultValue=""
-                minLength={2}
-                maxLength={40}
-                pattern="^[a-zA-Zа-яА-яёЁ\s\-]+$"
-                data-error-message="Поле должно содержать только латинские, кириллические буквы, знаки дефиса и пробелы."
-              />
-              <span className="popup__input-error profile-title-error"></span>
-            </fieldset>
-            <fieldset className="popup__subtitle">
-              <input
-                className="popup__input"
-                type="text"
-                name="profile__subtitle"
-                id="profile-subtitle"
-                placeholder="Профессия"
-                required
-                defaultValue=""
-                minLength={2}
-                maxLength={200}
-                pattern="^[a-zA-Zа-яА-яёЁ\s\-]+$"
-                data-error-message="Поле должно содержать только латинские, кириллические буквы, знаки дефиса и пробелы."
-              />
-              <span className="popup__input-error profile-subtitle-error"></span>
-            </fieldset>
-      </PopupWithForm>
+      <EditProfilePopup 
+        isOpen={this.state.isEditProfilePopupOpen} 
+        onClose={this.closeAllPopups} 
+        onUpdateUser={this.handleUpdateUser} /> 
+      
       <PopupWithForm 
         name="element"
         title="Новое место"

@@ -1,6 +1,11 @@
 function PopupWithForm(props) {
+  function click(e){
+    e.preventDefault();
+    console.log("click");
+  };
+
   return (<div className={`popup popup-${props.name} ${props.isOpen && ' popup_opened'}`}>
-  <div className="popup__window popup__window-avatar">
+  <div className="popup__window">
     <h3 className="popup__name">{props.title}</h3>
     <button
       type="button"
@@ -10,6 +15,7 @@ function PopupWithForm(props) {
     <form
       id="avatarEditForm"
       name={props.name}
+      onSubmit={props.onSubmit}
       className="popup__container"
       noValidate
     >
@@ -17,8 +23,9 @@ function PopupWithForm(props) {
       <button
         type="submit"
         id="avatarSubmit"
+        onClick={props.onSubmit}
         className="popup__button popup__button_making_save popup__button_making_save_avatar"
-        disabled
+        //disabled
       >
         {props.buttonText}
       </button>
