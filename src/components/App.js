@@ -6,6 +6,7 @@ import Footer from "./Footer";
 import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
 import EditProfilePopup from "./EditProfilePopup";
+import EditAvatarPopup from "./EditAvatarPopup";
 import {CurrentUserContext} from "../contexts/CurrentUserContext";
 
 class App extends React.Component {
@@ -40,6 +41,13 @@ class App extends React.Component {
     handleEditAvatarClick = () => {
       this.setState({ isEditAvatarPopupOpen: true });
     };
+    handleUpdateAvatar = (link) => {
+      Api.editProfileAvatar(link)
+      .then(()=>{
+        this.setState({currentUser: {...this.state.currentUser, userAvatar:link}});
+        this.closeAllPopups();
+      })
+    }
     handleEditProfileClick = () => {
       this.setState({ isEditProfilePopupOpen: true });
     };
@@ -133,25 +141,11 @@ render() {
               <span className="popup__input-error element-link-error"></span>
             </fieldset>
       </PopupWithForm>
-      <PopupWithForm 
-        name="avatar"
-        title="Обновить аватар"
-        buttonText="Сохранить"
-        isOpen={this.state.isEditAvatarPopupOpen}
-        onClose={this.closeAllPopups}>
-        <fieldset className="popup__subtitle">
-              <input
-                type="url"
-                className="popup__input"
-                name="avatar__link"
-                defaultValue=""
-                placeholder="Ссылка на изображение"
-                id="avatar-link"
-                required
-              />
-              <span className="popup__input-error avatar-link-error"></span>
-    </fieldset> 
-    </PopupWithForm>
+
+      <EditAvatarPopup 
+        isOpen={this.state.isEditAvatarPopupOpen} 
+        onClose={this.closeAllPopups} 
+        onUpdateAvatar={this.handleUpdateAvatar} />
   </CurrentUserContext.Provider>
   );
 }}

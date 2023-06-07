@@ -1,9 +1,4 @@
 function PopupWithForm(props) {
-  function click(e){
-    e.preventDefault();
-    console.log("click");
-  };
-
   return (<div className={`popup popup-${props.name} ${props.isOpen && ' popup_opened'}`}>
   <div className="popup__window">
     <h3 className="popup__name">{props.title}</h3>
