@@ -1,33 +1,12 @@
 import React from "react";
 import editPath from "../images/edit.svg";
-import Api from "../utlis/Api";
 import Card from "./Card";
+import {CurrentUserContext} from "../contexts/CurrentUserContext";
 
 class Main extends React.Component {
+    static contextType = CurrentUserContext;
     constructor(props) {
       super(props);
-  
-      this.state = { 
-        userName: "",
-        userDescription: "",
-        userAvatar: "",
-        cards: [] };
-    }
-
-     // Метод будет вызван сразу после монтирования: получаем первичные данные
-    componentDidMount() {
-      Promise.all([Api.getUser(), Api.getInitialCards()])
-        .then(([user, cards]) => {
-          //profile.id = user._id;
-          this.setState({userName: user.name,
-            userDescription: user.about,
-            userAvatar: user.avatar,
-            cards: cards
-          });
-        })
-        .catch((err) => {
-          console.error(err);
-        });
     }
   
 render() {
@@ -44,18 +23,18 @@ render() {
             src={editPath}
             alt="изменить аватарку"
           />
-          <img className="profile__avatar-img" alt="автарка" src={this.state.userAvatar} />
+          <img className="profile__avatar-img" alt="автарка" src={this.context.userAvatar} />
         </button>
         <div id="profileId" className="profile__info">
           <div className="profile__text">
-            <h1 className="profile__title">{this.state.userName}</h1>
+            <h1 className="profile__title">{this.context.userName}</h1>
             <button
               type="button"
               className="profile__button profile__button_making_edit"
               onClick={this.props.onEditProfile}
             ></button>
           </div>
-          <p className="profile__subtitle">{this.state.userDescription}</p>
+          <p className="profile__subtitle">{this.context.userDescription}</p>
         </div>
         <button
           type="button"
@@ -66,10 +45,12 @@ render() {
 
       <section className="elements">
         <ul className="elements__list">
-        {this.state.cards.map((card) => (
+        {this.props.cards.map((card) => (
           <Card 
             card={card} 
             onCardClick={this.props.onCardClick}
+            onCardDelete={this.props.onCardDelete}
+            onCardLike={this.props.onCardLike}
             key={card._id}/>
         ))}
         </ul>
