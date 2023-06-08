@@ -3,10 +3,10 @@ import Api from "../utlis/Api";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
-import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
+import AddPlacePopup from "./AddPlacePopup";
 import {CurrentUserContext} from "../contexts/CurrentUserContext";
 
 class App extends React.Component {
@@ -61,6 +61,13 @@ class App extends React.Component {
     handleAddPlaceClick = () => {
       this.setState({ isAddPlacePopupOpen: true });
     };
+    handleAddPlaceSubmit = (name, link) => {
+      Api.postNewElement(name, link)
+      .then((card) => {
+        this.setState({cards: [card, ...this.state.cards,]});
+        this.closeAllPopups();
+      });
+    };
     handleCardClick = (card)=> {
       this.setState({ selectedCard: card });
     };
@@ -105,47 +112,17 @@ render() {
         isOpen={this.state.isEditProfilePopupOpen} 
         onClose={this.closeAllPopups} 
         onUpdateUser={this.handleUpdateUser} /> 
-      
-      <PopupWithForm 
-        name="element"
-        title="Новое место"
-        buttonText="Сохранить"
-        isOpen={this.state.isAddPlacePopupOpen}
-        onClose={this.closeAllPopups}>
-            <fieldset className="popup__title">
-              <input
-                className="popup__input"
-                type="text"
-                name="element__title"
-                id="element-title"
-                placeholder="Название"
-                required
-                defaultValue=""
-                minLength={2}
-                maxLength={30}
-                pattern="^[a-zA-Zа-яА-яёЁ\s\-]+$"
-                data-error-message="Поле должно содержать только латинские, кириллические буквы, знаки дефиса и пробелы."
-              />
-              <span className="popup__input-error element-title-error"></span>
-            </fieldset>
-            <fieldset className="popup__subtitle">
-              <input
-                className="popup__input"
-                type="url"
-                name="element__link"
-                id="element-link"
-                placeholder="Ссылка на картинку"
-                required
-                defaultValue=""
-              />
-              <span className="popup__input-error element-link-error"></span>
-            </fieldset>
-      </PopupWithForm>
 
       <EditAvatarPopup 
         isOpen={this.state.isEditAvatarPopupOpen} 
         onClose={this.closeAllPopups} 
         onUpdateAvatar={this.handleUpdateAvatar} />
+
+      <AddPlacePopup 
+        isOpen={this.state.isAddPlacePopupOpen} 
+        onClose={this.closeAllPopups} 
+        onAddPlace={this.handleAddPlaceSubmit} />
+
   </CurrentUserContext.Provider>
   );
 }}
