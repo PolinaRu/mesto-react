@@ -47,6 +47,9 @@ class App extends React.Component {
         this.setState({currentUser: {...this.state.currentUser, userAvatar:link}});
         this.closeAllPopups();
       })
+      .catch((err) => {
+        console.error(err);
+      });
     }
     handleEditProfileClick = () => {
       this.setState({ isEditProfilePopupOpen: true });
@@ -56,6 +59,9 @@ class App extends React.Component {
       .then(() => {
         this.setState({currentUser: {...this.state.currentUser, userName:name,userDescription: about}});
         this.closeAllPopups();
+      })
+      .catch((err) => {
+        console.error(err);
       });
     };
     handleAddPlaceClick = () => {
@@ -66,6 +72,9 @@ class App extends React.Component {
       .then((card) => {
         this.setState({cards: [card, ...this.state.cards,]});
         this.closeAllPopups();
+      })
+      .catch((err) => {
+        console.error(err);
       });
     };
     handleCardClick = (card)=> {
@@ -75,6 +84,9 @@ class App extends React.Component {
       Api.deleteMyElement(id)
       .then(() => {
         this.setState({cards: this.state.cards.filter((item)=>item._id !== id)})
+      })
+      .catch((err) => {
+        console.error(err);
       });
     };
     handleCardLike(card) {
@@ -82,6 +94,9 @@ class App extends React.Component {
       // Отправляем запрос в API и получаем обновлённые данные карточки
       Api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
         this.setState({cards: this.state.cards.map((c) => c._id === card._id ? newCard : c)});
+      })
+      .catch((err) => {
+        console.error(err);
       });
     };
     closeAllPopups = ()=> {

@@ -1,5 +1,6 @@
 import React from "react";
 import {CurrentUserContext} from "../contexts/CurrentUserContext";
+//import {useForm} from "../hooks/useForm"; //не смогла корректно вызвать((
 import PopupWithForm from "./PopupWithForm";
 
 function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
@@ -11,7 +12,7 @@ function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
    React.useEffect(() => {
     setName(currentUser.userName);
     setDescription(currentUser.userDescription);
-  }, [currentUser]); 
+  }, [currentUser, isOpen]); 
 
  function handleChangeName(e) {
   setName(e.target.value);
@@ -41,7 +42,7 @@ function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
                 id="profile-title"
                 placeholder="Имя"
                 required
-                value={name}
+                value={name || ''}
                 onChange={handleChangeName}
                 minLength={2}
                 maxLength={40}
@@ -58,7 +59,7 @@ function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
                 id="profile-subtitle"
                 placeholder="Профессия"
                 required
-                value={description}
+                value={description || ''}
                 onChange={handleChangeDescription}
                 minLength={2}
                 maxLength={200}

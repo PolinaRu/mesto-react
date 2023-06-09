@@ -1,28 +1,29 @@
-function PopupWithForm(props) {
-  return (<div className={`popup popup-${props.name} ${props.isOpen && ' popup_opened'}`}>
+import {usePopupClose} from '../hooks/usePopupClose';
+
+function PopupWithForm({isOpen, onClose, onSubmit, name, title, buttonText, children}) {
+  usePopupClose(isOpen, onClose);
+
+  return (<div className={`popup popup-${name} ${isOpen && ' popup_opened'}`}>
   <div className="popup__window">
-    <h3 className="popup__name">{props.title}</h3>
+    <h3 className="popup__name">{title}</h3>
     <button
       type="button"
       className="popup__button popup__button_making_exit"
-      onClick={props.onClose}
+      onClick={onClose}
     ></button>
     <form
-      id="avatarEditForm"
-      name={props.name}
-      onSubmit={props.onSubmit}
+      name={name}
+      onSubmit={onSubmit}
       className="popup__container"
-      noValidate
+      //noValidate
     >
-      {props.children}
+      {children}
       <button
         type="submit"
-        id="avatarSubmit"
-        onClick={props.onSubmit}
         className="popup__button popup__button_making_save popup__button_making_save_avatar"
         //disabled
       >
-        {props.buttonText}
+        {buttonText}
       </button>
     </form>
   </div>
